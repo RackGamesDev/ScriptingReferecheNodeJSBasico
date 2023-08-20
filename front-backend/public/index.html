@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>pagina crud normal ajax</h1>
+    <h2>insertar</h2>
+    <form action="crud-form"><!--para enviar json en una peticion se usa un form-->
+        <input type="text" name="id", placeholder="texto a enviar 1" required>
+        <input type="text" name="nombre", placeholder="texto a enviar 1">
+        <input type="submit" value="enviar datos post"><!--trigger para enviar datos-->
+        <input type="hidden" name="id"><!--input oculto para la peticion-->
+    </form>
+    <br><br><br>
+    <h2>ver</h2>
+    <table class="crud-table">
+        <thead>
+           <tr>
+            <th>id</th>
+            <th>nombre</th>
+            <th>accion</th>
+           </tr> 
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <template id="crud-template"><!--plantilla, que genera un elemento en la tabla por cada elemento en la "base de datos"-->
+        <tr>
+            <td class="id"></td>
+            <td class="nombre"></td>
+            <td>
+                <button class="edit">editar</button>
+                <button class="delete">eliminar</button>
+            </td>
+        </tr>
+    </template>
+    <script>
+        const d = document;
+        const $table = d.querySelector(".crud-table");
+        const $form = d.querySelector("crud-form");
+        const $title = d.querySelector(".crud-title");
+        const $template = d.getElementById("crud-template").content;
+        const $fragment = d.createDocumentFragment();
+        
+        const ajax = (options) => {//creando una peticion, se puede llamar con distintas configuraciones tantas veces como sean necesarias
+            let {url, method, success, error, data} = options;
+            const xhr = new XMLHttpRequest();
+            xhr.addEventListener("readystatechange", () => {
+                if (xhr.readyState !== 4) return;
+                if (xhr.status >= 200 && xhr.status < 300){//que pasa una vez se reciba la respuesta
+                    let json = JSON.parse(xhr.responseText);//hace referencia a lo que sea que devuelva el server
+                    success(json);//ejecutando la funcion que se le pasa al llamar al const ajax
+                } else {//que pasa si da error
+                    let message = xhr.statusText || "error";
+                    error(message);//ejecutando la funcion que se le pasa al llamar al const ajax si da error
+                }
+            });
+            xhr.open(method || "GET", url);//se especifica el tipo de peticion y la url
+            xhr.setRequestHeader("Content-type", "application/json; charset=utf8");//establecer propiedades especificas en el header (nombre y valor) (la pagina se debe devolver desde el propio servidor)
+            xhr.send(JSON.stringify(data));//enviar finalmente la peticion, pasandole el body (en este caso es texto plano que viene de un json)
+        }
+
+        const getAll = () => {
+            ajax({
+                method: "GET",//que metodo es
+                url: "http://localhost:3000/",//a que url se manda
+                success: (res) => {console.log(res)},//funcion para manipular la respuesta
+                error: (err) => {console.warn(err); $table.insertAdjacentHTML("afterend", '<p>error</p>');},//si da error
+                data: null//body a enviar
+            });
+        }
+        d.addEventListener("DOMContentLoaded", getAll);
+    </script>
+</body>
+</html>

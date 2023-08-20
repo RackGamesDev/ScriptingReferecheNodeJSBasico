@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>pagina crud axios</h1>
+    <h2>insertar</h2>
+    <form action="crud-form"><!--para enviar json en una peticion se usa un form-->
+        <input type="text" name="id", placeholder="texto a enviar 1" required>
+        <input type="text" name="nombre", placeholder="texto a enviar 1">
+        <input type="submit" value="enviar datos post"><!--trigger para enviar datos-->
+        <input type="hidden" name="id"><!--input oculto para la peticion-->
+    </form>
+    <br><br><br>
+    <h2>ver</h2>
+    <table class="crud-table">
+        <thead>
+           <tr>
+            <th>id</th>
+            <th>nombre</th>
+            <th>accion</th>
+           </tr> 
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <template id="crud-template"><!--plantilla, que genera un elemento en la tabla por cada elemento en la "base de datos"-->
+        <tr>
+            <td class="id"></td>
+            <td class="nombre"></td>
+            <td>
+                <button class="edit">editar</button>
+                <button class="delete">eliminar</button>
+            </td>
+        </tr>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script><!--para usar axios se necesita esto (libreria externa)-->
+    <script>
+        const d = document;
+        const $table = d.querySelector(".crud-table");
+        const $form = d.querySelector("crud-form");
+        const $title = d.querySelector(".crud-title");
+        const $template = d.getElementById("crud-template").content;
+        const $fragment = d.createDocumentFragment();
+
+        const getAll = async () => {
+            try {
+                let res = await axios.get("http://127.0.0.1:3000/");//enviar la peticion (cada tipo es una funcion)
+                let json = await res.data;//recibir la respuesta
+            } catch (err) {
+                let message = err.statusText || "error";
+                $table.insertAdjacentHTML("afterend", "<p>error " + message + "</p>");
+            }
+        }
+        const create = async () => {
+            try {
+                let options = {
+                    method: "POST",//tipo de peticion
+                    headers: {//los headers se especifican como un json
+                        "Content-type": "application/json; charset=utf-8"
+                    },
+                    data: JSON.stringify({id: "1", nombre: "hola"})//se pone el body, deberia ser un texto
+                };
+                let res = await axios.get("http://127.0.0.1:3000/");//enviar peticion a la url
+                json = await res.data;//la respuesta del servidor
+                location.reload();//para hacer el getAll
+            } catch (err) {
+                let message = err.statusText || "error";
+                $form.insertAdjacentHTML("afterend", "<p>error " + message + "</p>");
+            }
+        }
+        d.addEventListener("DOMContentLoaded", getAll);
+    </script>
+</body>
+</html>

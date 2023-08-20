@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .drop-zone{
+            margin-left: auto;
+            margin-right: auto;
+            border: thin dotted black;
+            width: 80%;
+            height: 40vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .drop-zone.is-active{
+            border: thick dashed black;
+            background-color: gainsboro;
+            animation: pulse 1.5s infinite;
+            animation-timing-function: linear;
+        }
+        @keyframes pulse{
+            0%,100%{
+                transform: scale(1);
+            }
+            50%{
+                transform: scale(1.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>sube un archivo y me lo guardo</h1>
+    <form action="/files" method="post" enctype="multipart/form-data">
+        <input type="file" name="avatar" id=""><!--input para subir un archivo, para subir varios archivos se pone multiple. en el frontend (elemento) tiene una propiedad llamada .files (Array.from(elemento.files))-->
+        <input type="submit" value="enviar"><!--creara la peticion post con los datos del form, en este caso el archivo-->
+        <!--se puede hacer de otra forma en https://www.youtube.com/watch?v=w7bh68aZsKM&list=PLvq-jIkSeTUZ6QgYYO3MwG9EMqC-KoLXA&t=198s-->
+        <progress value="40" max="100"></progress><!--puede venir bien usar una progress bar como esta  https://www.youtube.com/watch?v=e_Th4Tji5Io&list=PLvq-jIkSeTUZ6QgYYO3MwG9EMqC-KoLXA&index=126-->
+    </form>
+
+    <article class="drop-zone"><!--opcion secundaria para drag and drop-->
+        <p>arrastra aqui...</p>
+    </article>
+    <script>//esto es para el drag and drop principalmente
+        const d = document;
+        const $dropZone = d.querySelector(".drop-zone");
+        const uploader = (file) => {//esto esta mas bien preparado para php por los videos
+            const xhr = new XMLHttpRequest();
+            const formData = new FormData();
+            formData.append("file", file);
+            xhr.addEventListener("readystatechange", e=> {
+                if(xhr.readyState !== 4) return;
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    let json = JSON.parse(xhr.responseText);
+                } else {
+                    let message = xhr.statusText || "error";
+                }
+            });
+            xhr.open("POST", "localhost:3000/files");
+            xhr.setRequestHeader("enc-type", "multipart/form-data");
+            xhr.send(formData);
+        }
+
+        $dropZone.addEventListener("dragover", e => {//con la api, esto es cuando pasas el raton por encima con un archivo o varios
+            e.preventDefault();
+            e.stopPropagation();
+            e.target.classList.add("is-active");
+        });
+        $dropZone.addEventListener("dragleave", e => {//y esto es cuando dejas de pasar el raton
+            e.preventDefault();
+            e.stopPropagation();
+            e.target.classList.remove("is-active");
+        });
+        $dropZone.addEventListener("drop", e => {//y cuando finalmente dejas caer los archivos
+            e.preventDefault();
+            e.stopPropagation();
+            e.target.classList.remove("is-active");
+            const files = Array.from(e.dataTransfer.files);
+            files.forEach();//array con los archivos
+        });
+    </script>
+</body>
+</html>

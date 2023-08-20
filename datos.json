@@ -1,0 +1,8 @@
+{
+    "nombre": "yo",
+    "numero": 123,
+    "extras": {
+        "unaVariable": 444,
+        "unarray": [1,2,3,4,5,5]
+    }
+}
