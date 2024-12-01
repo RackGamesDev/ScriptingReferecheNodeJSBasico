@@ -26,4 +26,4 @@ CREATE TABLE IF NOT EXISTS chats(
     tipoChat ENUM('PRIVADO', 'PUBLICO'),
     usuariosIdUsuario INT NOT NULL, CONSTRAINT fkmensaje_usuarios FOREIGN KEY(usuariosIdUsuario) REFERENCES usuarios(idUsuario)
 );
--- este script crea todas las tablas necesarias para este ejemplo, ejecutarlo en mysql workbench
+-- Este script crea todas las tablas necesarias para este ejemplo, ejecutarlo en mysql workbench
