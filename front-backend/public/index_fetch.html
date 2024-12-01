@@ -8,11 +8,11 @@
 <body>
     <h1>pagina crud fetch</h1>
     <h2>insertar</h2>
-    <form action="crud-form"><!--para enviar json en una peticion se usa un form-->
+    <form action="crud-form"><!--Para enviar json en una peticion se usa un form-->
         <input type="text" name="id", placeholder="texto a enviar 1" required>
         <input type="text" name="nombre", placeholder="texto a enviar 1">
-        <input type="submit" value="enviar datos post"><!--trigger para enviar datos-->
-        <input type="hidden" name="id"><!--input oculto para la peticion-->
+        <input type="submit" value="enviar datos post"><!--Trigger para enviar datos-->
+        <input type="hidden" name="id"><!--Input oculto para la peticion-->
     </form>
     <br><br><br>
     <h2>ver</h2>
@@ -28,7 +28,7 @@
 
         </tbody>
     </table>
-    <template id="crud-template"><!--plantilla, que genera un elemento en la tabla por cada elemento en la "base de datos"-->
+    <template id="crud-template"><!--Plantilla, que genera un elemento en la tabla por cada elemento en la "base de datos"-->
         <tr>
             <td class="id"></td>
             <td class="nombre"></td>
@@ -48,11 +48,11 @@
 
         const getAll = async () => {
             try {
-                let res = await fetch("http://127.0.0.1:3000/");//url de la peticion, al no ponerle options es un get sin body con las cabeceras pordefecto
-                let json = await res.json();//esto en caso de que devuelva un json, podria devolver un txt o otras cosas
+                let res = await fetch("http://127.0.0.1:3000/");//Url de la peticion, al no ponerle options es un get sin body con las cabeceras pordefecto
+                let json = await res.json();//Esto en caso de que devuelva un json, podria devolver un txt o otras cosas
                 if (!res.ok) throw {status: res.status, statusText: res.statusText};
 
-            } catch (err) {//si da error
+            } catch (err) {//Si da error
                 let message = err.statusText || "error";
                 $table.insertAdjacentHTML("afterend", "<p>error " + err.status + err.message + "</p>");
             }
@@ -60,18 +60,18 @@
         const create = async () => {
             try {
                 let options = {
-                    method: "POST",//tipo de peticion
-                    headers: {//los headers se especifican como un json
+                    method: "POST",//Tipo de peticion
+                    headers: {//Los headers se especifican como un json
                         "Content-type": "application/json; charset=utf-8"
                     },
-                    body: JSON.stringify({id: "1", nombre: "hola"})//se pone el body, deberia ser un texto
+                    body: JSON.stringify({id: "1", nombre: "hola"})//Se pone el body, deberia ser un texto
                 };
-                let res = await fetch("http://127.0.0.1:3000/", options);//url de la peticion, con el options
-                let json = await res.json();//esto en caso de que devuelva un json, podria devolver un txt o otras cosas
+                let res = await fetch("http://127.0.0.1:3000/", options);//Url de la peticion, con el options
+                let json = await res.json();//Esto en caso de que devuelva un json, podria devolver un txt o otras cosas
                 if (!res.ok) throw {status: res.status, statusText: res.statusText};
-                location.reload();//para que se vuelva a poner el getAll
+                location.reload();//Para que se vuelva a poner el getAll
 
-            } catch (err) {//si da error
+            } catch (err) {//Si da error
                 let message = err.statusText || "error";
                 $form.insertAdjacentHTML("afterend", "<p>error " + err.status + err.message + "</p>");
             }
