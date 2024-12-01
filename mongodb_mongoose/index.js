@@ -11,7 +11,7 @@ expressApp.use(ruta);
 
 
 const bootstr = async () => {
-    await mongoose.connect("mongodb+srv://yester:prueba123@prueba0.n2q4wr9.mongodb.net/?retryWrites=true&w=majority");//la url compartida por mongodb, cambiando <password>
+    await mongoose.connect("mongodb+srv://yester:prueba123@prueba0.n2q4wr9.mongodb.net/?retryWrites=true&w=majority");//La url compartida por mongodb, cambiando <password>
     expressApp.listen(3000, () => console.log("levantado"));
 }
 bootstr();
