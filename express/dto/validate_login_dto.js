@@ -13,7 +13,7 @@ import Ajv from 'ajv';
 //    required: ['email', 'password'],
 //    additionalProperties: false
 //}
-const LoginDTOSchema = Type.Object({//creando esquema de validacion, gracias al typebox se genera lo de arriba pero con funciones
+const LoginDTOSchema = Type.Object({//Creando esquema de validacion, gracias al typebox se genera lo de arriba pero con funciones
     email: Type.String({
         format: 'email',
         errorMessage: {
@@ -34,10 +34,10 @@ const ajv = new Ajv({allErrors: true});
 addFormats(ajv, ["email"]).addKeyword('kind').addKeyword('modifier');
 addErrors(ajv);
 
-const validate = ajv.compile(LoginDTOSchema);//esto es del ajv, hay que usar un objeto como el de arriba
+const validate = ajv.compile(LoginDTOSchema);//Esto es del ajv, hay que usar un objeto como el de arriba
 
 const validateLoginDTO = (req, res, next) => {
-    const isDTOValid = validate(req.body);//validando con el esquema
+    const isDTOValid = validate(req.body);//Validando con el esquema
     if(!isDTOValid) res.status(400).send(ajv.errorsText(validate.errors, {separator: "\n"}));
 
     next();
